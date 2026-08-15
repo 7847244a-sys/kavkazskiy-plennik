@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>
+Кавказский пленник
+</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+html,body{
+margin:0;
+padding:0;
+background:#f7f3eb;
+color:#302a24;
+font-family:Georgia,"Times New Roman",serif;
+}
+
+.screen{
+display:none;
+min-height:100vh;
+}
+
+.screen.active{
+display:block;
+}
+
+button{
+font:inherit;
+}
+
+.primary{
+border:0;
+border-radius:12px;
+background:#7d4027;
+color:white;
+padding:15px 24px;
+min-height:52px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.cover{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:12px;
+background:#d9c49a;
+}
+
+.cover-inner{
+position:relative;
+width:min(94vw,650px);
+height:min(96vh,940px);
+}
+
+.cover-inner img{
+width:100%;
+height:100%;
+display:block;
+object-fit:contain;
+}
+
+.cover-button{
+position:absolute;
+left:20%;
+right:20%;
+bottom:4%;
+height:12%;
+opacity:0;
+cursor:pointer;
+}
+
+.bar{
+position:sticky;
+top:0;
+z-index:10;
+display:grid;
+grid-template-columns:50px 1fr 65px;
+gap:10px;
+align-items:center;
+padding:9px;
+background:#f7f3ebf5;
+border-bottom:1px solid #d9cdbb;
+}
+
+.bar button{
+min-height:44px;
+border:1px solid #d9cdbb;
+border-radius:10px;
+background:white;
+}
+
+.bar-title{
+text-align:center;
+font-weight:bold;
+}
+
+.count{
+text-align:right;
+font-size:14px;
+color:#75695d;
+}
+
+.main{
+padding:25px 12px 60px;
+}
+
+.book,
+.quiz-card,
+.finish-card{
+width:min(900px,96vw);
+margin:auto;
+background:#fffdf8;
+border:1px solid #d9cdbb;
+box-shadow:0 15px 45px #302a2414;
+padding:clamp(22px,5vw,55px);
+}
+
+.kicker{
+font-size:13px;
+letter-spacing:.13em;
+color:#a66b39;
+font-weight:bold;
+}
+
+h1,h2{
+margin:12px 0 28px;
+}
+
+h2{
+font-size:clamp(30px,5vw,46px);
+}
+
+.text{
+font-size:18px;
+line-height:1.48;
+}
+
+.text p{
+margin:0 0 .68em;
+text-align:justify;
+}
+
+.wide{
+width:100%;
+margin-top:25px;
+}
+
+.question{
+padding:20px 0;
+border-top:1px solid #d9cdbb;
+}
+
+.question h3{
+font-size:20px;
+line-height:1.4;
+}
+
+.option{
+display:flex;
+gap:12px;
+align-items:flex-start;
+padding:13px;
+margin:8px 0;
+border:1px solid #d9cdbb;
+border-radius:12px;
+background:white;
+cursor:pointer;
+min-height:52px;
+}
+
+.option input{
+width:22px;
+height:22px;
+flex:none;
+}
+
+.result{
+margin-top:20px;
+padding:18px;
+border-radius:12px;
+font-size:18px;
+line-height:1.5;
+}
+
+.good{
+background:#e7f0e4;
+border:1px solid #b7caae;
+}
+
+.bad{
+background:#f4e3dd;
+border:1px solid #d6b1a4;
+}
+
+.finish{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:#f7f3eb;
+}
+
+.finish-card{
+text-align:center;
+}
+
+.finish-card h1{
+font-size:clamp(42px,9vw,70px);
+}
+
+.finish-card p{
+font-size:20px;
+line-height:1.55;
+}
+
+@media(max-width:600px){
+
+.text p{
+text-align:left;
+}
+
+.book,
+.quiz-card,
+.finish-card{
+padding:20px 15px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- ОБЛОЖКА -->
+
+<section id="cover"
+class="screen active">
+
+<div class="cover">
+
+<div class="cover-inner">
+
+<img
+src="images/cover.svg"
+alt="Кавказский пленник">
+
+<button
+class="cover-button"
+onclick="start()">
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ЧТЕНИЕ -->
+
+<section id="reader"
+class="screen">
+
+<div class="bar">
+
+<button onclick="cover()">
+⌂
+</button>
+
+<div id="barTitle"
+class="bar-title">
+</div>
+
+<div id="count"
+class="count">
+</div>
+
+</div>
+
+<div class="main">
+
+<article class="book">
+
+<div class="kicker">
+ЛЕВ НИКОЛАЕВИЧ ТОЛСТОЙ
+</div>
+
+<h2 id="chapterTitle">
+</h2>
+
+<div id="text"
+class="text">
+</div>
+
+<button
+class="primary wide"
+onclick="openQuiz()">
+
+ПЕРЕЙТИ К ПРОВЕРКЕ
+
+</button>
+
+</article>
+
+</div>
+
+</section>
+
+
+<!-- ТЕСТ -->
+
+<section id="quiz"
+class="screen">
+
+<div class="bar">
+
+<button onclick="openChapter()">
+←
+</button>
+
+<div id="quizTitle"
+class="bar-title">
+</div>
+
+<div class="count">
+7 вопросов
+</div>
+
+</div>
+
+<div class="main">
+
+<article class="quiz-card">
+
+<div class="kicker">
+ПРОВЕРКА ПОНИМАНИЯ
+</div>
+
+<h2>
+Проверь себя
+</h2>
+
+<div id="questions">
+</div>
+
+<button
+class="primary wide"
+onclick="checkAnswers()">
+
+ПРОВЕРИТЬ ОТВЕТЫ
+
+</button>
+
+<div id="result"
+class="result"
+style="display:none">
+</div>
+
+</article>
+
+</div>
+
+</section>
+
+
+<!-- ФИНАЛ -->
+
+<section id="finish"
+class="screen finish">
+
+<article class="finish-card">
+
+<div style="font-size:64px">
+★
+</div>
+
+<div class="kicker">
+КНИГА ПРОЧИТАНА
+</div>
+
+<h1>
+ПОЗДРАВЛЯЕМ!
+</h1>
+
+<p>
+Ты прочитал «Кавказского пленника»!
+</p>
+
+<p>
+Ты прошёл весь путь вместе с героями,
+внимательно читал главы и проверил,
+насколько хорошо понял историю.
+</p>
+
+<p>
+<b>
+Ты отлично справился!
+</b>
+</p>
+
+<p>
+Чтение — это не просто прочитать книгу.
+Это увидеть мир глазами героев,
+пережить вместе с ними приключения
+и научиться замечать то,
+что скрывается между строк.
+</p>
+
+<p>
+<b>
+Книга прочитана.
+Приключение завершено.
+<br>
+Но впереди тебя ждут новые истории!
+</b>
+</p>
+
+<button
+class="primary"
+onclick="goBeginning()">
+
+В НАЧАЛО
+
+</button>
+
+</article>
+
+</section>
+
+
+<script src="book.js"></script>
+
+<script>
+
+let current=0;
+
+
+function show(id){
+
+document
+.querySelectorAll(".screen")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+document
+.getElementById(id)
+.classList.add("active");
+
+window.scrollTo(0,0);
+
+}
+
+
+function cover(){
+
+show("cover");
+
+}
+
+
+function start(){
+
+current=0;
+
+openChapter();
+
+}
+
+
+function goBeginning(){
+
+current=0;
+
+openChapter();
+
+}
+
+
+function openChapter(){
+
+const chapter=
+BOOK.chapters[current];
+
+document
+.getElementById("barTitle")
+.textContent=
+"Глава "+chapter.roman;
+
+document
+.getElementById("count")
+.textContent=
+(current+1)+"/6";
+
+document
+.getElementById("chapterTitle")
+.textContent=
+"Глава "+chapter.roman;
+
+const text=
+document.getElementById("text");
+
+text.innerHTML="";
+
+chapter.paragraphs.forEach(
+p=>{
+
+const el=
+document.createElement("p");
+
+el.textContent=p;
+
+text.appendChild(el);
+
+}
+);
+
+show("reader");
+
+}
+
+
+function openQuiz(){
+
+const chapter=
+BOOK.chapters[current];
+
+document
+.getElementById("quizTitle")
+.textContent=
+"Глава "+chapter.roman;
+
+const box=
+document.getElementById("questions");
+
+box.innerHTML="";
+
+chapter.questions.forEach(
+(q,index)=>{
+
+const block=
+document.createElement("div");
+
+block.className=
+"question";
+
+const title=
+document.createElement("h3");
+
+title.textContent=
+(index+1)+". "+q.q;
+
+block.appendChild(title);
+
+q.options.forEach(
+(option,j)=>{
+
+const label=
+document.createElement("label");
+
+label.className=
+"option";
+
+const input=
+document.createElement("input");
+
+input.type="radio";
+
+input.name=
+"q"+index;
+
+input.value=j;
+
+const span=
+document.createElement("span");
+
+span.textContent=
+String.fromCharCode(1040+j)
++") "+option;
+
+label.appendChild(input);
+
+label.appendChild(span);
+
+block.appendChild(label);
+
+}
+);
+
+box.appendChild(block);
+
+}
+);
+
+const result=
+document.getElementById("result");
+
+result.style.display="none";
+
+show("quiz");
+
+}
+
+
+function checkAnswers(){
+
+const chapter=
+BOOK.chapters[current];
+
+let score=0;
+
+let answered=true;
+
+chapter.questions.forEach(
+(q,index)=>{
+
+const selected=
+document.querySelector(
+'input[name="q'+index+'"]:checked'
+);
+
+if(!selected){
+
+answered=false;
+
+return;
+
+}
+
+if(
+Number(selected.value)
+===
+Number(q.correct)
+){
+
+score++;
+
+}
+
+}
+);
+
+const result=
+document.getElementById("result");
+
+result.style.display="block";
+
+
+if(
+answered &&
+score===7
+){
+
+result.className=
+"result good";
+
+if(
+current<5
+){
+
+result.innerHTML=
+"<b>Отлично! Все ответы правильные!</b>"
++
+"<br><br>"
++
+'<button class="primary" onclick="nextChapter()">'
++
+"СЛЕДУЮЩАЯ ГЛАВА →"
++
+"</button>";
+
+}else{
+
+result.innerHTML=
+"<b>Отлично! Все ответы правильные!</b>"
++
+"<br><br>"
++
+'<button class="primary" onclick="finish()">'
++
+"ЗАВЕРШИТЬ КНИГУ"
++
+"</button>";
+
+}
+
+}else{
+
+result.className=
+"result bad";
+
+result.innerHTML=
+"<b>Не всё получилось правильно.</b>"
++
+"<br><br>"
++
+"Вернись в начало главы и прочитай её ещё раз внимательно."
++
+"<br><br>"
++
+'<button class="primary" onclick="openChapter()">'
++
+"← В НАЧАЛО ГЛАВЫ"
++
+"</button>";
+
+}
+
+}
+
+
+function nextChapter(){
+
+current++;
+
+openChapter();
+
+}
+
+
+function finish(){
+
+show("finish");
+
+}
+
+</script>
+
+</body>
+
+</html>
